@@ -80,7 +80,7 @@ void mqtt_init(void) {
         .credentials.username = "VmPHEK7CVlEvK7L8b38W", // Replace with your MQTT username
     };
 
-    mqtt_client = esp_mqtt_client_init(&mqtt_cfg);
+    esp_mqtt_client_handler_t mqtt_client = esp_mqtt_client_init(&mqtt_cfg);
     if (mqtt_client == NULL) {
         ESP_LOGE(TAG, "Failed to create MQTT client");
         return;
