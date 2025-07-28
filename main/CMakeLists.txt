@@ -1,4 +1,4 @@
 idf_component_register(
-    SRCS "sensor.c" "WIFI.c" "led_control.c" "websocket.c"
+    SRCS "sensor.c" 
     INCLUDE_DIRS "."
 )
