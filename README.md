@@ -1,45 +1,113 @@
-# esp-idf-vscode-boilerplate
-Boilerplate for developing ESP32 projects using ESP-IDF and VS Code
+# ESP32 MQTT Integration with ThingsBoard
 
-  > Note 1: You need to have installed [C/C++](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools) extension in your VS Code.
+📡 **IoT Project – Dummy Sensor Data via MQTT**  
+This project demonstrates how to connect an **ESP32** to the **ThingsBoard IoT platform** over MQTT. The ESP32 publishes **dummy temperature and humidity sensor values** in JSON format, which are visualized on the ThingsBoard dashboard.  
 
-  > Note 2: Make sure that you have `ESP_IDF` environment variable (which leads to esp-idf folder) and path to XTENSA compiler _bin_ folder needs to be present on the `PATH`.
+🔗 GitHub Repository: [Things_Board](https://github.com/daniyal-944/Things_Board)
 
-## How to use
+---
 
-1. Clone repository
+## 🚀 Features
+- ✅ MQTT connection with **ThingsBoard Cloud** (`mqtt://thingsboard.cloud`)  
+- ✅ Authentication using **device access token**  
+- ✅ **Dummy sensor data** (temperature & humidity) generation  
+- ✅ JSON telemetry publishing to `v1/devices/me/telemetry`  
+- ✅ Periodic publishing using **FreeRTOS tasks**  
+- ✅ Verified visualization on **ThingsBoard dashboard**  
+
+---
+
+## 🛠️ Technical Details
+
+### MQTT Client
+- **Broker:** `mqtt://thingsboard.cloud`  
+- **Authentication:** Device access token (no username/password needed)  
+- **Topic:** `v1/devices/me/telemetry`  
+- **APIs Used:**
+  - `esp_mqtt_client_init()` – Initialize client  
+  - `esp_mqtt_client_start()` – Connect to broker  
+  - `esp_mqtt_client_publish()` – Send telemetry  
+
+### Telemetry Data Format
+```json
+{
+  "temperature": 27,
+  "humidity": 65
+}
 ```
-git clone https://github.com/abobija/esp-idf-vscode-boilerplate.git my-project
-```
 
-2. Go inside of project folder
-```
-cd my-project
-```
 
-3. Start VSC
-```
-code .
-```
+## 🛠️ Dummy Sensor Logic
+- Temperature & humidity values are **randomly generated** for simulation.  
+- Data is sent every **5 seconds** using FreeRTOS `vTaskDelay()`.  
 
-## Config, Build and Flash
+---
 
+## 📂 Project Structure
+Things_Board/
+│── main/
+│ ├── main.c # ESP32 firmware
+│── CMakeLists.txt
+│── sdkconfig
+└── README.md
+
+
+---
+
+## ⚙️ Getting Started
+
+### 1️⃣ Prerequisites
+- Install **ESP-IDF** (v5.x recommended) → [ESP-IDF Setup Guide](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/index.html)  
+- Create a **ThingsBoard Cloud** account → [ThingsBoard](https://thingsboard.cloud)  
+- An ESP32 development board + USB cable  
+
+### 2️⃣ Register Device in ThingsBoard
+1. Log in to **ThingsBoard Cloud**.  
+2. Navigate to **Devices → Add New Device**.  
+3. Copy the **Access Token** from the device settings.  
+
+### 3️⃣ Configure the ESP32 Firmware
+Open `main/main.c` and replace the placeholder token with your device access token:
+```c
+#define THINGSBOARD_TOKEN "YOUR_DEVICE_ACCESS_TOKEN"
 ```
+---
+## 4️⃣ Build & Flash
+```bash
 idf.py set-target esp32
-idf.py menuconfig
 idf.py build
-idf.py -p (PORT) flash
+idf.py -p /dev/ttyUSB0 flash monitor
 ```
+---
+### 5️⃣ Verify
 
-## Demo
+- In the ESP-IDF monitor, you should see successful MQTT connection logs and telemetry publishes.
+- On the ThingsBoard dashboard, add temperature & humidity widgets to visualize data.
+---
+### 📊 Outputs
 
-[![Get started with ESP32 in VS CODE ... ESP-IDF](https://img.youtube.com/vi/aQi8qiW9fmg/mqdefault.jpg)](https://www.youtube.com/watch?v=aQi8qiW9fmg)
+- ESP-IDF Monitor Logs
+- Shows MQTT connection status and telemetry publish logs.
+- ThingsBoard Dashboard
+- Real-time temperature & humidity widgets.
 
-## Author
+---
+## 📌 Summary
 
-GitHub: [abobija](https://github.com/abobija)<br>
-Homepage: [abobija.com](https://abobija.com)
+This project demonstrates end-to-end IoT data flow:  
+**ESP32 → MQTT → ThingsBoard → Dashboard**
 
-## License
+It provides a strong foundation for integrating real sensors in future IoT applications.
 
-[MIT](LICENSE)
+---
+
+## 💡 Future Improvements
+
+- 🔹 Replace dummy values with real sensor readings (DHT11/DHT22).  
+- 🔹 Enable QoS 1 for reliable delivery.  
+- 🔹 Add reconnection logic for MQTT failures.  
+- 🔹 Implement bi-directional communication to receive commands from ThingsBoard.  
+
+---
+
+✍️ Developed as part of an IoT learning assignment.
